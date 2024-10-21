@@ -10,3 +10,6 @@
 [submodule "bgfx"]
 	path = bgfx
 	url = https://github.com/bkaradzic/bgfx/
+[submodule "ultralight"]
+	path = ultralight
+	url = https://github.com/ultralight-ux/Ultralight.git
