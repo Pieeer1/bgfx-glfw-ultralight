@@ -10,6 +10,3 @@
 [submodule "bgfx"]
 	path = bgfx
 	url = https://github.com/bkaradzic/bgfx/
-[submodule "cef"]
-	path = cef
-	url = https://github.com/chromiumembedded/cef

@@ -6,10 +6,11 @@ local BGFX_DIR = "bgfx"
 local BIMG_DIR = "bimg"
 local BX_DIR = "bx"
 local GLFW_DIR = "glfw"
+local ULTRALIGHT_DIR = "ultralight"
 
 solution "bgfx-minimal-example"
 	location(BUILD_DIR)
-	startproject "helloworld"
+	startproject "engine"
 	configurations { "Release", "Debug" }
 	if os.is64bit() and not os.istarget("windows") then
 		platforms "x86_64"
@@ -51,42 +52,24 @@ function setBxCompat()
 		buildoptions { "-x objective-c++" }
 end
 	
-project "helloworld"
+project "engine"
 	kind "ConsoleApp"
 	language "C++"
 	cppdialect "C++20"
 	exceptionhandling "Off"
 	rtti "Off"
-	files "helloworld.cpp"
+	files "engine.cpp"
 	includedirs
 	{
 		path.join(BGFX_DIR, "include"),
 		path.join(BX_DIR, "include"),
-		path.join(GLFW_DIR, "include")
+		path.join(GLFW_DIR, "include"),
+		path.join(ULTRALIGHT_DIR, "include"),
 	}
-	links { "bgfx", "bimg", "bx", "glfw" }
-	filter "system:windows"
-		links { "gdi32", "kernel32", "psapi" }
-	filter "system:linux"
-		links { "dl", "GL", "pthread", "X11" }
-	filter "system:macosx"
-		links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework" }
-	setBxCompat()
+	
+	libdirs { path.join(ULTRALIGHT_DIR, "lib")}
 
-project "helloworld_mt"
-	kind "ConsoleApp"
-	language "C++"
-	cppdialect "C++20"
-	exceptionhandling "Off"
-	rtti "Off"
-	files "helloworld_mt.cpp"
-	includedirs
-	{
-		path.join(BGFX_DIR, "include"),
-		path.join(BX_DIR, "include"),
-		path.join(GLFW_DIR, "include")
-	}
-	links { "bgfx", "bimg", "bx", "glfw" }
+	links { "bgfx", "bimg", "bx", "glfw", "Ultralight", "UltralightCore", "AppCore", "WebCore" }
 	filter "system:windows"
 		links { "gdi32", "kernel32", "psapi" }
 	filter "system:linux"
@@ -244,3 +227,38 @@ project "glfw"
 
 	filter "action:vs*"
 		defines "_CRT_SECURE_NO_WARNINGS"
+
+-- project "ultralight"
+-- 	kind "StaticLib"
+-- 	language "C++"
+-- 	cppdialect "C++17"
+-- 	exceptionhandling "Off"
+-- 	rtti "Off"
+
+-- 	includedirs
+-- 	{
+-- 		path.join(ULTRALIGHT_DIR, "include"),
+-- 	}
+
+-- 	filter "system:windows"
+-- 		libdirs { path.join(ULTRALIGHT_DIR, "lib") } 
+-- 		links { "Ultralight.lib", "UltralightCore.lib", "WebCore.lib", "AppCore.lib" } 
+
+-- 	filter "configurations:Debug"
+-- 		libdirs { path.join(ULTRALIGHT_DIR, "lib") }
+-- 		links { "Ultralight.lib", "UltralightCore.lib", "WebCore.lib", "AppCore.lib" }
+-- 		defines { "DEBUG" }
+-- 		symbols "On"
+
+-- 	filter "configurations:Release"
+-- 		libdirs { path.join(ULTRALIGHT_DIR, "lib") }
+-- 		links { "Ultralight.lib", "UltralightCore.lib", "WebCore.lib", "AppCore.lib" }
+-- 		defines { "NDEBUG" }
+-- 		optimize "On"
+
+-- 	postbuildcommands {
+-- 		("{COPY} " .. path.join(ULTRALIGHT_DIR, "bin/*.dll") .. " %{cfg.targetdir}")
+-- 	}
+
+-- 	filter "system:windows"
+-- 		links { "gdi32", "user32", "kernel32" }
