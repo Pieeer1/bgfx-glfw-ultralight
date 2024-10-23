@@ -78,13 +78,16 @@ project "engine"
 		links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework" }
 	setBxCompat()
 
+	-- TODO - implement other operating systems, as well as just compiling this all from src. the latter should fix the operating system issue as well. just need to figure out where the ultralight src is.
 	filter { "action:vs*" }
 		postbuildmessage "Copying DLL files..."
 		postbuildcommands {
 		'{COPY} "%{prj.basedir}/ultralight/bin/Ultralight.dll" "../%{cfg.targetdir}/vs2022/bin/x86_64/%{cfg.buildcfg}/"',
 		'{COPY} "%{prj.basedir}/ultralight/bin/AppCore.dll" "../%{cfg.targetdir}/vs2022/bin/x86_64/%{cfg.buildcfg}/"',
 		'{COPY} "%{prj.basedir}/ultralight/bin/UltralightCore.dll" "../%{cfg.targetdir}/vs2022/bin/x86_64/%{cfg.buildcfg}/"',
-		'{COPY} "%{prj.basedir}/ultralight/bin/WebCore.dll" "../%{cfg.targetdir}/vs2022/bin/x86_64/%{cfg.buildcfg}/"'
+		'{COPY} "%{prj.basedir}/ultralight/bin/WebCore.dll" "../%{cfg.targetdir}/vs2022/bin/x86_64/%{cfg.buildcfg}/"',
+		'{COPY} "%{prj.basedir}/ultralight/resources/cacert.pem" "../%{cfg.targetdir}/vs2022/resources/"',
+		'{COPY} "%{prj.basedir}/ultralight/resources/icudt67l.dat" "../%{cfg.targetdir}/vs2022/resources/"',
 		}
 
 project "bgfx"
