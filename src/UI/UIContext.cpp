@@ -1,9 +1,9 @@
-#include "UltralightContext.h"
+#include "UIContext.h"
 #include <AppCore/Platform.h>
 #include <bgfx/bgfx.h>
 #include "../Math/Vector2.h"
 
-void UltralightContext::init()
+void UIContext::init(Vector2 size)
 {
 	ultralight::Config config;
 
@@ -22,7 +22,9 @@ void UltralightContext::init()
 	ultralight::ViewConfig view_config;
 	view_config.is_accelerated = false;
 	
-	this->view = this->renderer->CreateView(1280, 1024, view_config, nullptr);
+	this->uiSize = size;
+
+	this->view = this->renderer->CreateView(this->uiSize.x, this->uiSize.y, view_config, nullptr);
 
 	this->view->LoadHTML("<h1>Hello world</h1>");
 
@@ -33,12 +35,26 @@ void UltralightContext::init()
 	this->bitmap = bmSurface->bitmap();
 }
 
-void UltralightContext::on_resize(Vector2 newSize)
+void UIContext::on_resize(Vector2 newSize)
 {
+	if (newSize == Vector2(0, 0))
+	{
+		return;
+	}
+
+	if (newSize == this->uiSize)
+	{
+		return;
+	}
+	
+
 	this->view->Resize(newSize.x, newSize.y);
+
+
+	this->uiSize = newSize;
 }
 
-void UltralightContext::copy_surface_bitmap_to_texture()
+void UIContext::copy_surface_bitmap_to_texture()
 {
 	void* pixels = this->bitmap->LockPixels();
 
@@ -63,7 +79,7 @@ void UltralightContext::copy_surface_bitmap_to_texture()
 	this->bitmap->UnlockPixels();
 }
 
-void UltralightContext::tick()
+void UIContext::tick()
 {
 	this->renderer->Update();
 }

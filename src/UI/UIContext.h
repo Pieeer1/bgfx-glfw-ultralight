@@ -13,12 +13,14 @@ struct Logger : ultralight::Logger
 	};
 };
 
-class UltralightContext
+class UIContext
 {
 private: 
 	ultralight::RefPtr<ultralight::View> view;
 	ultralight::RefPtr<ultralight::Renderer> renderer;
 	ultralight::RefPtr<ultralight::Bitmap> bitmap;
+
+	Vector2 uiSize;
 
 	Logger logger;
 	ultralight::ViewListener viewListener;
@@ -26,7 +28,7 @@ private:
 	bgfx::TextureHandle textureHandle; 
 
 public:
-	void init();
+	void init(Vector2 size);
 	void copy_surface_bitmap_to_texture();
 	void on_resize(Vector2 newSize);
 	void tick();

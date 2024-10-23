@@ -1,7 +1,3 @@
-/*
- * Copyright 2011-2019 Branimir Karadzic. All rights reserved.
- * License: https://github.com/bkaradzic/bgfx#license-bsd-2-clause
- */
 #include <stdio.h>
 #include <bx/bx.h>
 #include <bgfx/bgfx.h>
@@ -15,7 +11,7 @@
 #define GLFW_EXPOSE_NATIVE_COCOA
 #endif
 #include <GLFW/glfw3native.h>
-#include "UI/UltralightContext.h"
+#include "UI/UIContext.h"
 
 static bool s_showStats = false;
 
@@ -33,11 +29,7 @@ static void glfw_keyCallback(GLFWwindow *window, int key, int scancode, int acti
 
 int main(int argc, char **argv)
 {
-	UltralightContext context;
-
-	context.init();
-
-
+	UIContext uiContext;
 
 	// Create a GLFW window without an OpenGL context.
 	glfwSetErrorCallback(glfw_errorCallback);
@@ -63,6 +55,9 @@ int main(int argc, char **argv)
 #endif
 	int width, height;
 	glfwGetWindowSize(window, &width, &height);
+
+	uiContext.init(Vector2(static_cast<float>(width), static_cast<float>(height)));
+
 	init.resolution.width = (uint32_t)width;
 	init.resolution.height = (uint32_t)height;
 	init.resolution.reset = BGFX_RESET_VSYNC;
@@ -80,6 +75,7 @@ int main(int argc, char **argv)
 		if (width != oldWidth || height != oldHeight) {
 			bgfx::reset((uint32_t)width, (uint32_t)height, BGFX_RESET_VSYNC);
 			bgfx::setViewRect(kClearView, 0, 0, bgfx::BackbufferRatio::Equal);
+			uiContext.on_resize(Vector2(static_cast<float>(width), static_cast<float>(height)));
 		}
 		// This dummy draw call is here to make sure that view 0 is cleared if no other draw calls are submitted to view 0.
 		bgfx::touch(kClearView);
