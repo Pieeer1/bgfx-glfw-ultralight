@@ -77,7 +77,22 @@ project "engine"
 	filter "system:macosx"
 		links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework" }
 	setBxCompat()
-	
+
+	print("Workspace location: %{wks.location}")
+	print("Project location: %{prj.location}")
+	print("Current configuration: %{cfg.buildcfg}")
+	print("Output directory: %{cfg.targetdir}")
+
+
+	filter { "action:vs*" }
+		postbuildmessage "Copying DLL files..."
+		postbuildcommands {
+		'{COPY} "%{prj.basedir}/ultralight/bin/Ultralight.dll" "../%{cfg.targetdir}/vs2022/bin/x86_64/%{cfg.buildcfg}/"',
+		'{COPY} "%{prj.basedir}/ultralight/bin/AppCore.dll" "../%{cfg.targetdir}/vs2022/bin/x86_64/%{cfg.buildcfg}/"',
+		'{COPY} "%{prj.basedir}/ultralight/bin/UltralightCore.dll" "../%{cfg.targetdir}/vs2022/bin/x86_64/%{cfg.buildcfg}/"',
+		'{COPY} "%{prj.basedir}/ultralight/bin/WebCore.dll" "../%{cfg.targetdir}/vs2022/bin/x86_64/%{cfg.buildcfg}/"'
+		}
+
 project "bgfx"
 	kind "StaticLib"
 	language "C++"
@@ -227,38 +242,3 @@ project "glfw"
 
 	filter "action:vs*"
 		defines "_CRT_SECURE_NO_WARNINGS"
-
--- project "ultralight"
--- 	kind "StaticLib"
--- 	language "C++"
--- 	cppdialect "C++17"
--- 	exceptionhandling "Off"
--- 	rtti "Off"
-
--- 	includedirs
--- 	{
--- 		path.join(ULTRALIGHT_DIR, "include"),
--- 	}
-
--- 	filter "system:windows"
--- 		libdirs { path.join(ULTRALIGHT_DIR, "lib") } 
--- 		links { "Ultralight.lib", "UltralightCore.lib", "WebCore.lib", "AppCore.lib" } 
-
--- 	filter "configurations:Debug"
--- 		libdirs { path.join(ULTRALIGHT_DIR, "lib") }
--- 		links { "Ultralight.lib", "UltralightCore.lib", "WebCore.lib", "AppCore.lib" }
--- 		defines { "DEBUG" }
--- 		symbols "On"
-
--- 	filter "configurations:Release"
--- 		libdirs { path.join(ULTRALIGHT_DIR, "lib") }
--- 		links { "Ultralight.lib", "UltralightCore.lib", "WebCore.lib", "AppCore.lib" }
--- 		defines { "NDEBUG" }
--- 		optimize "On"
-
--- 	postbuildcommands {
--- 		("{COPY} " .. path.join(ULTRALIGHT_DIR, "bin/*.dll") .. " %{cfg.targetdir}")
--- 	}
-
--- 	filter "system:windows"
--- 		links { "gdi32", "user32", "kernel32" }
