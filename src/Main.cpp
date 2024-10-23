@@ -15,7 +15,7 @@
 #define GLFW_EXPOSE_NATIVE_COCOA
 #endif
 #include <GLFW/glfw3native.h>
-#include "UltralightContext.h"
+#include "UI/UltralightContext.h"
 
 static bool s_showStats = false;
 
