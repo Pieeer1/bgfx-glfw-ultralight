@@ -1,6 +1,7 @@
 #include "UltralightContext.h"
 #include <AppCore/Platform.h>
 #include <bgfx/bgfx.h>
+#include "../Math/Vector2.h"
 
 void UltralightContext::init()
 {
@@ -32,9 +33,9 @@ void UltralightContext::init()
 	this->bitmap = bmSurface->bitmap();
 }
 
-void on_resize()
+void UltralightContext::on_resize(Vector2 newSize)
 {
-
+	this->view->Resize(newSize.x, newSize.y);
 }
 
 void UltralightContext::copy_surface_bitmap_to_texture()

@@ -3,6 +3,7 @@
 #include <Ultralight/Ultralight.h>
 #include <iostream>
 #include <bgfx/bgfx.h> 
+#include "../Math/Vector2.h"
 
 struct Logger : ultralight::Logger
 {
@@ -22,12 +23,12 @@ private:
 	Logger logger;
 	ultralight::ViewListener viewListener;
 	ultralight::LoadListener loadListener;
-	bgfx::TextureHandle textureHandle;
+	bgfx::TextureHandle textureHandle; 
 
 public:
 	void init();
 	void copy_surface_bitmap_to_texture();
-	void on_resize();
+	void on_resize(Vector2 newSize);
 	void tick();
 };
 
