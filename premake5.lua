@@ -78,12 +78,6 @@ project "engine"
 		links { "QuartzCore.framework", "Metal.framework", "Cocoa.framework", "IOKit.framework", "CoreVideo.framework" }
 	setBxCompat()
 
-	print("Workspace location: %{wks.location}")
-	print("Project location: %{prj.location}")
-	print("Current configuration: %{cfg.buildcfg}")
-	print("Output directory: %{cfg.targetdir}")
-
-
 	filter { "action:vs*" }
 		postbuildmessage "Copying DLL files..."
 		postbuildcommands {

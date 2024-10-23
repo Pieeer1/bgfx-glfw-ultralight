@@ -17,6 +17,7 @@
 #include <GLFW/glfw3native.h>
 #include "logo.h"
 #include <Ultralight/Ultralight.h>
+#include <AppCore/Platform.h>
 
 static bool s_showStats = false;
 
@@ -31,13 +32,38 @@ static void glfw_keyCallback(GLFWwindow *window, int key, int scancode, int acti
 		s_showStats = !s_showStats;
 }
 
-int main(int argc, char **argv)
+static void initUltralight() 
 {
 	ultralight::Config config;
 
 	config.user_stylesheet = "body { background: purple; }";
 
 	ultralight::Platform::instance().set_config(config);
+
+	ultralight::Platform::instance().set_font_loader(ultralight::GetPlatformFontLoader());
+
+	ultralight::Platform::instance().set_file_system(ultralight::GetPlatformFileSystem("."));
+
+	ultralight::Platform::instance().set_logger(ultralight::GetDefaultLogger("ultralight.log"));
+
+}
+
+static void createRenderer()
+{
+}
+
+
+int main(int argc, char **argv)
+{
+	initUltralight();
+
+	try {
+		ultralight::Renderer::Create();
+	}
+	catch (const std::exception& e) {
+		printf("Error: %s\n", e.what());
+		return 1;
+	}
 
 	// Create a GLFW window without an OpenGL context.
 	glfwSetErrorCallback(glfw_errorCallback);
