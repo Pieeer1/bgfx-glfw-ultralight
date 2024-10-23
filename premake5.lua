@@ -58,7 +58,7 @@ project "engine"
 	cppdialect "C++20"
 	exceptionhandling "Off"
 	rtti "Off"
-	files "engine.cpp"
+	files { "src/**.cpp", "src/**.h" }
 	includedirs
 	{
 		path.join(BGFX_DIR, "include"),
